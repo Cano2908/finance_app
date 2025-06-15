@@ -1,59 +1,45 @@
-# FinanceApp
+# FinanceApp - Frontend Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+Este proyecto es el frontend desarrollado en Angular para el sistema de la Universidad Veracruzana, materia de **Finanzas Personales y Empresariales**. Su objetivo es proporcionar una interfaz intuitiva para la consulta y generación de reportes financieros, consumiendo la API backend correspondiente.
 
-## Development server
+## Funcionalidades
 
-To start a local development server, run:
+- **Visualización de Análisis Horizontal y Vertical**: Permite visualizar análisis de cuentas contables de forma gráfica y detallada.
+- **Reportes Financieros**: Consulta y muestra reportes del estado de resultados y balance general.
+- **Interfaz Moderna**: Desarrollada con Angular, asegurando una experiencia de usuario fluida y responsiva.
+- **Integración con API Backend**: Se conecta fácilmente con la API para obtener y mostrar datos en tiempo real.
 
-```bash
-ng serve
-```
+## Tecnologías
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Framework**: Angular 20.0.1
+- **Consumo de API**: HTTP Client de Angular para comunicación con el backend.
+- **Estilos**: [Especificar si se usa algún framework de estilos, por ejemplo: Angular Material, Bootstrap, etc.]
 
-## Code scaffolding
+## Uso
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Clona el repositorio.
+2. Instala las dependencias con `npm install`.
+3. Configura el archivo de entorno (`environment.ts`) con la URL de la API backend.
+4. Inicia el servidor de desarrollo con:
 
-```bash
-ng generate component component-name
-```
+  ```bash
+  ng serve
+  ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+5. Accede a la aplicación en `http://localhost:4200/`.
 
-```bash
-ng generate --help
-```
+## Recursos adicionales
 
-## Building
+Para más información sobre Angular CLI y comandos disponibles, visita la [documentación oficial de Angular CLI](https://angular.dev/tools/cli).
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Sobre el autor
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Desarrollado por [Christian Noe Carballo Cano](https://www.linkedin.com/in/cano2908/).
 
-## Running unit tests
+Si tienes dudas o sugerencias, no dudes en contactarme a través de mi [LinkedIn](https://www.linkedin.com/in/cano2908/).
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+© Universidad Veracruzana - Materia de Finanzas Personales y Empresariales
