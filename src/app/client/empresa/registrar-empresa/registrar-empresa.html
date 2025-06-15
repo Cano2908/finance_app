@@ -1,0 +1,170 @@
+<app-navbar></app-navbar>
+
+<form class="container mt-4 form-container" (ngSubmit)="crearEmpresa()" #empresaForm="ngForm">
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre:</label>
+    <input
+      type="text"
+      id="nombre"
+      name="nombre"
+      class="form-control"
+      placeholder="Ejemplo: Mi Empresa S.A."
+      [(ngModel)]="createEmpresa.nombre"
+      required
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="rfc" class="form-label">RFC:</label>
+    <input
+      type="text"
+      id="rfc"
+      name="rfc"
+      class="form-control"
+      placeholder="Ejemplo: ABC123456XYZ"
+      [(ngModel)]="createEmpresa.rfc"
+      required
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary submit-btn"
+    [disabled]="!empresaForm.form.valid"
+  >
+    Guardar
+  </button>
+</form>
+
+@if (succesModal) {
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-success">
+        <div class="modal-header">
+          <h5 class="modal-title">Éxito</h5>
+        </div>
+        <div class="modal-body">
+          <p>
+            Empresa <strong>{{ createEmpresa.nombre }}</strong> con RFC
+            <strong>{{ createEmpresa.rfc }}</strong> creada exitosamente
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="cerrarModal()">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (errorModal) {
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-error">
+        <div class="modal-header">
+          <h5 class="modal-title">Error</h5>
+        </div>
+        <div class="modal-body">
+          <p>Hubo un problema al crear la empresa, intente más tarde.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="cerrarModal()">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<style>
+  .form-container {
+    max-width: 480px;
+    background: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #004085;
+  }
+
+  input.form-control {
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input.form-control:focus {
+    border-color: #004a99;
+    box-shadow: 0 0 8px rgba(0, 74, 153, 0.3);
+  }
+
+  input.form-control::placeholder {
+    color: #6c757d;
+    font-style: italic;
+  }
+
+  .submit-btn {
+    width: 100%;
+    font-weight: 700;
+    padding: 0.5rem 0;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .submit-btn:disabled {
+    background-color: #a3c0ff;
+    border-color: #a3c0ff;
+  }
+
+  .submit-btn:not(:disabled):hover {
+    background-color: #004a99;
+    border-color: #004a99;
+  }
+
+  /* Modales */
+
+  .modal-content {
+    border-radius: 1rem;
+    padding: 1.25rem;
+  }
+
+  .modal-success {
+    border: 2px solid #28a745;
+  }
+
+  .modal-error {
+    border: 2px solid #dc3545;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    background: linear-gradient(135deg, #007bff, #004a99);
+    color: white;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .modal-title {
+    font-weight: 700;
+  }
+
+  .modal-footer {
+    border-top: none;
+    justify-content: center;
+  }
+</style>

@@ -1,0 +1,864 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid px-4 py-5">
+  <!-- Header Section con gradiente -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="bg-gradient bg-primary text-white rounded-4 p-4 shadow-lg">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <div class="bg-white bg-opacity-25 rounded-circle p-3 me-4">
+              <i class="bi bi-building-check fs-2"></i>
+            </div>
+            <div>
+              <h1 class="display-6 fw-bold mb-2">
+                Periodos Contables - {{empresa.nombre}}
+              </h1>
+              <p class="fs-5 mb-1 opacity-90">RFC: {{empresa.rfc}}</p>
+              <p class="mb-0 opacity-75">
+                <i class="bi bi-info-circle me-2"></i>
+                Gestiona tus Estados Financieros de manera eficiente
+              </p>
+            </div>
+          </div>
+          <button
+            class="btn btn-light btn-lg fw-medium px-4 shadow-sm border-0 d-flex align-items-center gap-2 configurar-reporte-btn"
+            (click)="configurarReporte = true"
+            style="
+              background: linear-gradient(90deg, #f8fafc 60%, #e3f0ff 100%);
+              border-radius: 2rem;
+              transition: all 0.3s;
+            "
+          >
+            <span
+              class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle p-2 me-2"
+              style="transition: background 0.3s"
+            >
+              <i class="bi bi-gear text-primary fs-5"></i>
+            </span>
+            <span class="fw-semibold text-primary">Configurar Reporte</span>
+          </button>
+          <style>
+            .configurar-reporte-btn:hover {
+              background: linear-gradient(90deg, #e3f0ff 60%, #f8fafc 100%);
+              box-shadow: 0 0.5rem 1.5rem rgba(13, 110, 253, 0.08);
+              transform: translateY(-2px) scale(1.03);
+            }
+            .configurar-reporte-btn .bi-gear {
+              animation: spin-gear 1.2s linear infinite paused;
+            }
+            .configurar-reporte-btn:hover .bi-gear {
+              animation-play-state: running;
+            }
+            @keyframes spin-gear {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    @if (periodos.length > 0) {
+    <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4">
+      @for (periodo of periodos; track periodo._id) {
+      <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+          <!-- Card Header con año destacado -->
+          <div class="card-header bg-light border-0 py-4">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <h4 class="card-title mb-1 text-primary fw-bold">
+                  <i class="bi bi-calendar-event me-2"></i>
+                  Periodo {{ periodo.anio }}
+                </h4>
+                <div class="d-flex flex-column gap-1">
+                  <small class="text-muted">
+                    <i class="bi bi-calendar-range me-1"></i>
+                    <strong>Inicio:</strong> {{ periodo.fecha_inicio}}
+                  </small>
+                  <small class="text-muted">
+                    <i class="bi bi-calendar-check me-1"></i>
+                    <strong>Fin:</strong> {{ periodo.fecha_fin}}
+                  </small>
+                </div>
+              </div>
+              <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                <i class="bi bi-graph-up text-primary fs-4"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <!-- Estado de Resultados -->
+            <div class="financial-section mb-4">
+              <div class="d-flex align-items-center mb-3">
+                <div
+                  class="section-icon bg-success bg-opacity-10 rounded-circle p-2 me-3"
+                >
+                  <i class="bi bi-bar-chart-line text-success"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-dark">Estado de Resultados</h6>
+              </div>
+
+              @if (!tieneDocumentoCargado(periodo,
+              TipoDocumento.ESTADO_RESULTADOS)) {
+              <button
+                class="btn btn-outline-success btn-sm w-100 py-2 fw-medium upload-btn"
+                (click)="abrirModal(TipoDocumento.ESTADO_RESULTADOS, AccionModal.CARGAR, periodo._id)"
+              >
+                <i class="bi bi-cloud-upload me-2"></i>
+                Cargar Información
+              </button>
+              } @else {
+              <button
+                class="btn btn-success btn-sm w-100 py-2 fw-medium loaded-btn"
+                (click)="abrirModal(TipoDocumento.ESTADO_RESULTADOS, AccionModal.VER, periodo._id)"
+              >
+                <i class="bi bi-check-circle me-2"></i>
+                Información Cargada
+              </button>
+              }
+            </div>
+
+            <!-- Balance General -->
+            <div class="financial-section">
+              <div class="d-flex align-items-center mb-3">
+                <div
+                  class="section-icon bg-info bg-opacity-10 rounded-circle p-2 me-3"
+                >
+                  <i class="bi bi-diagram-3 text-info"></i>
+                </div>
+                <h6 class="mb-0 fw-semibold text-dark">Balance General</h6>
+              </div>
+
+              @if (!tieneDocumentoCargado(periodo,
+              TipoDocumento.BALANCE_GENERAL)) {
+              <button
+                class="btn btn-outline-info btn-sm w-100 py-2 fw-medium upload-btn"
+                (click)="abrirModal(TipoDocumento.BALANCE_GENERAL, AccionModal.CARGAR, periodo._id)"
+              >
+                <i class="bi bi-cloud-upload me-2"></i>
+                Cargar Información
+              </button>
+              } @else {
+              <button
+                class="btn btn-info btn-sm w-100 py-2 fw-medium loaded-btn"
+                (click)="abrirModal(TipoDocumento.BALANCE_GENERAL, AccionModal.VER, periodo._id)"
+              >
+                <i class="bi bi-check-circle me-2"></i>
+                Información Cargada
+              </button>
+              }
+            </div>
+          </div>
+
+          <!-- Progress indicator -->
+          <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+            <div
+              class="d-flex justify-content-between align-items-center small text-muted"
+            >
+              <span>Completado:</span>
+              <div class="d-flex align-items-center">
+                @if (tieneDocumentoCargado(periodo,
+                TipoDocumento.ESTADO_RESULTADOS) &&
+                tieneDocumentoCargado(periodo, TipoDocumento.BALANCE_GENERAL)) {
+                <span class="badge bg-success me-2">100%</span>
+                <div class="progress" style="width: 60px; height: 6px">
+                  <div
+                    class="progress-bar bg-success"
+                    style="width: 100%"
+                  ></div>
+                </div>
+                } @else if (tieneDocumentoCargado(periodo,
+                TipoDocumento.ESTADO_RESULTADOS) ||
+                tieneDocumentoCargado(periodo, TipoDocumento.BALANCE_GENERAL)) {
+                <span class="badge bg-warning me-2">50%</span>
+                <div class="progress" style="width: 60px; height: 6px">
+                  <div class="progress-bar bg-warning" style="width: 50%"></div>
+                </div>
+                } @else {
+                <span class="badge bg-secondary me-2">0%</span>
+                <div class="progress" style="width: 60px; height: 6px">
+                  <div
+                    class="progress-bar bg-secondary"
+                    style="width: 0%"
+                  ></div>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body text-center py-5">
+            <div class="mb-4">
+              <div
+                class="bg-info bg-opacity-10 rounded-circle p-4 d-inline-block"
+              >
+                <i
+                  class="bi bi-calendar-x text-info"
+                  style="font-size: 3rem"
+                ></i>
+              </div>
+            </div>
+            <h4 class="text-dark mb-3">No hay periodos disponibles</h4>
+            <p class="text-muted mb-4">
+              Para comenzar a gestionar sus estados financieros, necesita
+              agregar al menos un periodo contable.
+            </p>
+            <button
+              class="btn btn-primary btn-lg px-4"
+              (click)="agregarPeriodo()"
+            >
+              <i class="bi bi-plus-circle me-2"></i>
+              Agregar Periodo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal Unificado con diseño moderno -->
+@if (modalState.abierto) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px)"
+>
+  <div
+    class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-light border-0 py-4">
+        <div class="d-flex align-items-center">
+          <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+            <i class="bi bi-file-earmark-spreadsheet text-primary fs-5"></i>
+          </div>
+          <h4 class="modal-title mb-0 fw-bold text-dark">{{ modalTitle }}</h4>
+        </div>
+        <button
+          type="button"
+          class="btn-close btn-close-white bg-secondary bg-opacity-10 rounded-circle p-2"
+          (click)="cerrarModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <!-- Modo Cargar -->
+        @if (modalState.accion === AccionModal.CARGAR) {
+
+        <!-- Toggle de modo de carga con diseño moderno -->
+        <div class="card bg-light border-0 mb-4">
+          <div class="card-body py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-toggles text-primary me-3 fs-5"></i>
+                <div>
+                  <h6 class="mb-1 fw-semibold">Modo de carga</h6>
+                  <small class="text-muted">
+                    {{ modoCargaManual ? 'Ingreso manual de datos' : 'Carga
+                    desde archivo' }}
+                  </small>
+                </div>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm px-4 py-2 fw-medium"
+                (click)="toggleModoCarga()"
+              >
+                <i class="bi bi-arrow-repeat me-2"></i>
+                {{ modoCargaManual ? 'Usar archivo' : 'Ingreso manual' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario Manual -->
+        @if (modoCargaManual) {
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h6 class="mb-0 fw-semibold text-dark">
+              <i class="bi bi-pencil-square me-2 text-primary"></i>
+              Ingreso Manual de Datos
+            </h6>
+          </div>
+          <div class="card-body">
+            <form #formManual="ngForm">
+              <div class="row g-4">
+                @for (field of currentFields; track field.key) {
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control form-control-lg border-0 bg-light"
+                      [id]="field.key"
+                      [value]="getFieldValue(field.key)"
+                      (input)="setFieldValue(field.key, getInputValueSafe($event))"
+                      [name]="field.key"
+                      [required]="field.required"
+                      [placeholder]="field.label || ''"
+                      [title]="field.label || ''"
+                      [attr.aria-label]="field.label"
+                    />
+                    <label [for]="field.key" class="fw-medium text-dark">
+                      {{ field.label }} @if (field.required) {
+                      <span class="text-danger">*</span>
+                      }
+                    </label>
+                  </div>
+                </div>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+        }
+
+        <!-- Carga por archivo -->
+        @else {
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h6 class="mb-0 fw-semibold text-dark">
+              <i class="bi bi-cloud-upload me-2 text-primary"></i>
+              Carga desde Archivo
+            </h6>
+          </div>
+          <div class="card-body">
+            <div
+              class="upload-area border-2 border-dashed border-primary rounded-4 p-5 text-center"
+            >
+              <div class="mb-3">
+                <i
+                  class="bi bi-file-earmark-arrow-up text-primary"
+                  style="font-size: 3rem"
+                ></i>
+              </div>
+              <h6 class="text-dark mb-2">Selecciona tu archivo</h6>
+              <p class="text-muted mb-3">
+                Formatos soportados: CSV, Excel (.xls, .xlsx)
+              </p>
+              <input
+                type="file"
+                class="form-control d-none"
+                id="archivo"
+                (change)="onArchivoSeleccionado($event)"
+                accept=".csv,.xls,.xlsx"
+              />
+              <label for="archivo" class="btn btn-primary btn-lg px-4">
+                <i class="bi bi-folder2-open me-2"></i>
+                Examinar archivos
+              </label>
+
+              @if (archivo) {
+              <div class="mt-4 p-3 bg-success bg-opacity-10 rounded-3">
+                <div class="d-flex align-items-center justify-content-center">
+                  <i
+                    class="bi bi-file-earmark-check text-success me-2 fs-5"
+                  ></i>
+                  <span class="text-success fw-medium">
+                    {{ archivo.name }}
+                  </span>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        } }
+
+        <!-- Modo Ver/Editar -->
+        @if (modalState.accion === AccionModal.VER) {
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0 fw-semibold text-dark">
+                <i class="bi bi-eye me-2 text-primary"></i>
+                {{ modoEdicion ? 'Editando Información' : 'Visualizando
+                Información' }}
+              </h6>
+              @if (modoEdicion) {
+              <span class="badge bg-warning">
+                <i class="bi bi-pencil me-1"></i>
+                Modo Edición
+              </span>
+              }
+            </div>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row g-4">
+                @for (field of currentFields; track field.key) {
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="number"
+                      class="form-control form-control-lg border-0"
+                      [class.bg-light]="!modoEdicion"
+                      [class.bg-white]="modoEdicion"
+                      [id]="field.key + '_view'"
+                      [value]="getFieldValue(field.key)"
+                      (input)="setFieldValue(field.key, getInputValueSafe($event))"
+                      [name]="field.key"
+                      [disabled]="!modoEdicion"
+                      [placeholder]="field.label || ''"
+                      [title]="field.label || ''"
+                      [attr.aria-label]="field.label"
+                    />
+                    <label
+                      [for]="field.key + '_view'"
+                      class="fw-medium text-dark"
+                    >
+                      {{ field.label }}
+                    </label>
+                  </div>
+                </div>
+                }
+              </div>
+            </form>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="modal-footer bg-light border-0 py-4">
+        <!-- Botones para modo Cargar -->
+        @if (modalState.accion === AccionModal.CARGAR) {
+        <div class="d-flex gap-3 w-100 justify-content-end">
+          <button
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="cerrarModal()"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            Cancelar
+          </button>
+          <button
+            class="btn btn-primary btn-lg px-4 fw-medium"
+            (click)="guardar()"
+            [disabled]="!modoCargaManual && !archivo"
+          >
+            <i class="bi bi-check-circle me-2"></i>
+            {{ modoCargaManual ? 'Guardar Datos' : 'Procesar Archivo' }}
+          </button>
+        </div>
+        }
+
+        <!-- Botones para modo Ver/Editar -->
+        @if (modalState.accion === AccionModal.VER) {
+        <!-- Modo visualización -->
+        @if (!modoEdicion && !mostrarConfirmacionEliminacion) {
+        <div class="d-flex gap-3 w-100 justify-content-end">
+          <button
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="cerrarModal()"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            Cerrar
+          </button>
+          <button
+            class="btn btn-warning btn-lg px-4"
+            (click)="habilitarEdicion()"
+          >
+            <i class="bi bi-pencil me-2"></i>
+            Editar
+          </button>
+          <button
+            class="btn btn-outline-danger btn-lg px-4"
+            (click)="mostrarConfirmacionEliminar()"
+          >
+            <i class="bi bi-trash me-2"></i>
+            Eliminar
+          </button>
+        </div>
+        }
+
+        <!-- Modo edición -->
+        @if (modoEdicion && !mostrarConfirmacionEliminacion) {
+        <div class="d-flex gap-3 w-100 justify-content-end">
+          <button
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="cancelarEdicion()"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            Cancelar
+          </button>
+          <button
+            class="btn btn-success btn-lg px-4 fw-medium"
+            (click)="guardarEdicion()"
+          >
+            <i class="bi bi-check-circle me-2"></i>
+            Guardar Cambios
+          </button>
+        </div>
+        }
+
+        <!-- Confirmación de eliminación -->
+        @if (mostrarConfirmacionEliminacion) {
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <div class="d-flex align-items-center">
+            <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
+              <i class="bi bi-exclamation-triangle text-warning fs-5"></i>
+            </div>
+            <div>
+              <h6 class="mb-1 text-dark">¿Confirmar eliminación?</h6>
+              <small class="text-muted">Esta acción no se puede deshacer</small>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <button
+              class="btn btn-outline-secondary btn-lg px-4"
+              (click)="cancelarEliminacion()"
+            >
+              <i class="bi bi-x-circle me-2"></i>
+              Cancelar
+            </button>
+            <button
+              class="btn btn-danger btn-lg px-4 fw-medium"
+              (click)="confirmarEliminacion()"
+            >
+              <i class="bi bi-trash me-2"></i>
+              Eliminar
+            </button>
+          </div>
+        </div>
+        } }
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal de Configuración de Reporte -->
+@if (configurarReporte) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px)"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white border-0 py-4">
+        <div class="d-flex align-items-center">
+          <div class="bg-white bg-opacity-25 rounded-circle p-2 me-3">
+            <i class="bi bi-file-earmark-bar-graph fs-5"></i>
+          </div>
+          <h4 class="modal-title mb-0 fw-bold">
+            Configurar Reporte de Períodos
+          </h4>
+        </div>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="cerrarModalReporte()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <!-- Información del reporte -->
+        <div class="card bg-light border-0 mb-4">
+          <div class="card-body py-3">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-info-circle text-primary me-3 fs-5"></i>
+              <div>
+                <h6 class="mb-1 fw-semibold">Reporte de Estados Financieros</h6>
+                <small class="text-muted">
+                  Selecciona los períodos que deseas incluir en el reporte
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controles de selección -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h6 class="mb-1 fw-semibold text-dark">
+              Períodos Disponibles
+              <span class="badge bg-primary ms-2"
+                >{{ periodosCompletos.length }}</span
+              >
+            </h6>
+            <small class="text-muted">
+              Solo períodos con Estado de Resultados y Balance General completos
+            </small>
+          </div>
+          <div class="btn-group" role="group">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              (click)="seleccionarTodos()"
+              [disabled]="generandoReporte || periodosCompletos.length === 0"
+            >
+              <i class="bi bi-check-all me-1"></i>
+              Seleccionar Todo
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="deseleccionarTodos()"
+              [disabled]="generandoReporte"
+            >
+              <i class="bi bi-x-circle me-1"></i>
+              Deseleccionar Todo
+            </button>
+          </div>
+        </div>
+
+        <!-- Lista de períodos seleccionables (solo completos) -->
+        @if (periodosCompletos.length > 0) {
+        <div class="row g-3">
+          @for (periodo of periodosCompletos; track periodo._id) {
+          <div class="col-md-6">
+            <div
+              class="card border-2 cursor-pointer periodo-card"
+              [class.border-primary]="esPeriodoSeleccionado(periodo.anio.toString())"
+              [class.bg-primary]="esPeriodoSeleccionado(periodo.anio.toString())"
+              [class.text-white]="esPeriodoSeleccionado(periodo.anio.toString())"
+              [class.border-light]="!esPeriodoSeleccionado(periodo.anio.toString())"
+              (click)="togglePeriodoSeleccion(periodo.anio.toString())"
+              [style.cursor]="generandoReporte ? 'not-allowed' : 'pointer'"
+              [style.opacity]="generandoReporte ? '0.6' : '1'"
+            >
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="rounded-circle p-2 me-3"
+                      [class.bg-white]="esPeriodoSeleccionado(periodo.anio.toString())"
+                      [class.bg-opacity-25]="esPeriodoSeleccionado(periodo.anio.toString())"
+                      [class.bg-primary]="!esPeriodoSeleccionado(periodo.anio.toString())"
+                      [class.bg-opacity-10]="!esPeriodoSeleccionado(periodo.anio.toString())"
+                    >
+                      <i
+                        class="bi bi-calendar-event fs-6"
+                        [class.text-primary]="esPeriodoSeleccionado(periodo.anio.toString())"
+                        [class.text-white]="!esPeriodoSeleccionado(periodo.anio.toString())"
+                      ></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-1 fw-bold">Período {{ periodo.anio }}</h6>
+                      <small
+                        class="opacity-75"
+                        [class.text-white-50]="esPeriodoSeleccionado(periodo.anio.toString())"
+                        [class.text-muted]="!esPeriodoSeleccionado(periodo.anio.toString())"
+                      >
+                        {{ periodo.fecha_inicio }} - {{ periodo.fecha_fin }}
+                      </small>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    @if (esPeriodoSeleccionado(periodo.anio.toString())) {
+                    <i class="bi bi-check-circle-fill text-white fs-4 me-2"></i>
+                    } @else {
+                    <i class="bi bi-circle text-muted fs-4 me-2"></i>
+                    }
+                    <!-- Indicador de completitud -->
+                    <span class="badge bg-success">
+                      <i class="bi bi-check-all me-1"></i>
+                      Completo
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        } @else {
+        <!-- Mensaje cuando no hay períodos completos -->
+        <div class="card bg-warning bg-opacity-10 border-warning">
+          <div class="card-body text-center py-5">
+            <div class="mb-3">
+              <i
+                class="bi bi-exclamation-triangle text-warning"
+                style="font-size: 3rem"
+              ></i>
+            </div>
+            <h5 class="text-warning mb-3">
+              No hay períodos completos disponibles
+            </h5>
+            <p class="text-muted mb-0">
+              Para generar un reporte, necesitas al menos dos períodos que tenga
+              tanto
+              <strong>Estado de Resultados</strong> como
+              <strong>Balance General</strong> cargados.
+            </p>
+          </div>
+        </div>
+        }
+
+        <!-- Resumen de selección -->
+        @if (periodosSeleccionados.length > 0) {
+        <div class="card bg-success bg-opacity-10 border-success mt-4">
+          <div class="card-body py-3">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle text-success me-3 fs-5"></i>
+              <div>
+                <h6 class="mb-1 text-success fw-semibold">
+                  {{ periodosSeleccionados.length }} período(s) seleccionado(s)
+                </h6>
+                <small class="text-success">
+                  Años: {{ periodosSeleccionados.join(', ') }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="modal-footer bg-light border-0 py-4">
+        <div class="d-flex gap-3 w-100 justify-content-end">
+          <button
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="cerrarModalReporte()"
+            [disabled]="generandoReporte"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            Cancelar
+          </button>
+          <button
+            class="btn btn-primary btn-lg px-4 fw-medium"
+            (click)="generarReporte()"
+            [disabled]="periodosSeleccionados.length === 0 || generandoReporte || periodosCompletos.length === 0"
+          >
+            @if (generandoReporte) {
+            <span
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+            ></span>
+            Generando... } @else {
+            <i class="bi bi-download me-2"></i>
+            Generar Reporte }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<style>
+  /* Estilos personalizados para mejorar la apariencia */
+  .hover-card {
+    transition: all 0.3s ease;
+  }
+
+  .hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+
+  .loaded-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loaded-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  .section-icon {
+    transition: all 0.3s ease;
+  }
+
+  .financial-section:hover .section-icon {
+    transform: scale(1.1);
+  }
+
+  .upload-area {
+    transition: all 0.3s ease;
+    background: linear-gradient(
+      135deg,
+      rgba(13, 110, 253, 0.05),
+      rgba(13, 110, 253, 0.1)
+    );
+  }
+
+  .upload-area:hover {
+    border-color: var(--bs-primary) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(13, 110, 253, 0.1),
+      rgba(13, 110, 253, 0.15)
+    );
+  }
+
+  .form-floating > .form-control:focus ~ label {
+    color: var(--bs-primary);
+  }
+
+  .progress {
+    border-radius: 10px;
+  }
+
+  .progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+  }
+
+  .btn {
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .modal-content {
+    border-radius: 1rem;
+  }
+
+  .card {
+    border-radius: 1rem;
+  }
+
+  .bg-gradient {
+    background: linear-gradient(135deg, var(--bs-primary), #0056b3) !important;
+  }
+</style>

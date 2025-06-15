@@ -1,0 +1,105 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-5 px-3 px-md-5">
+  <h2 class="mb-2 fw-bold">
+    Registrar nuevo periodo para
+    <span class="text-primary">{{empresa.nombre}}</span>:
+    <span class="text-muted">{{empresa.rfc}}</span>
+  </h2>
+  <p class="text-muted fw-semibold mb-4">
+    Ingrese los datos del periodo que desea registrar.
+  </p>
+
+  <form
+    (ngSubmit)="crearPeriodo()"
+    #empresaForm="ngForm"
+    class="bg-light p-4 rounded shadow-sm"
+  >
+    <div class="mb-3">
+      <label for="anio" class="form-label fw-semibold">Año:</label>
+      <input
+        type="number"
+        id="anio"
+        name="anio"
+        class="form-control shadow-sm"
+        [(ngModel)]="createPeriodo.anio"
+        required
+        min="2000"
+        max="2100"
+        placeholder="Ej. 2024"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary fw-bold px-4"
+      [disabled]="!empresaForm.form.valid"
+    >
+      Guardar
+    </button>
+  </form>
+</div>
+
+<!-- ✅ Modal de éxito -->
+@if (succesModal) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-success">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title fw-bold">¡Éxito!</h5>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0">
+          El periodo <strong>{{ createPeriodo.anio }}</strong> fue creado
+          exitosamente.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-success fw-semibold"
+          (click)="cerrarModal()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ❌ Modal de error -->
+@if (errorModal) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title fw-bold">Error</h5>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0">
+          Ya existe un periodo con este año. Por favor, verifique los datos
+          ingresados.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-danger fw-semibold"
+          (click)="errorModal = false"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

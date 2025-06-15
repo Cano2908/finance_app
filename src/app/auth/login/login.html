@@ -1,0 +1,95 @@
+<div class="login-bg d-flex align-items-center justify-content-center min-vh-100">
+  <div class="container">
+    @if (!isLoggedIn) {
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4 login-card">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <h2 class="fw-bold mb-2">Bienvenido a FinanceApp</h2>
+              <p class="text-muted mb-0">Inicie sesión para utilizar el software</p>
+            </div>
+            <form (ngSubmit)="login()" #loginForm="ngForm" autocomplete="off">
+              <div class="mb-4">
+                <label for="username" class="form-label">Usuario</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                  <input
+                    type="text"
+                    id="username"
+                    class="form-control"
+                    name="username"
+                    required
+                    [(ngModel)]="username"
+                    placeholder="Ingrese su usuario"
+                  />
+                </div>
+              </div>
+              <div class="mb-4">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    class="form-control"
+                    name="password"
+                    required
+                    [(ngModel)]="password"
+                    placeholder="Ingrese su contraseña"
+                  />
+                    <button type="button" class="btn btn-outline-secondary" tabindex="-1"
+                    (click)="showPassword = !showPassword" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-success w-100 py-2 fw-semibold"
+                [disabled]="loginForm.invalid"
+              >
+                Entrar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <router-outlet></router-outlet>
+    }
+  </div>
+</div>
+<div style="position: fixed; right: 20px; bottom: 20px; z-index: 9999; color: #fff; font-size: 0.95rem; opacity: 0.8;">
+  Versión 1.0.0
+</div>
+
+
+<style>
+.login-bg {
+  background: linear-gradient(135deg, #0d6efd 0%, #198754 100%);
+  min-height: 100vh;
+}
+.login-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 1.5rem;
+}
+.login-card .form-label {
+  font-weight: 500;
+}
+.login-card .input-group-text {
+  border-right: 0;
+}
+.login-card .form-control {
+  border-left: 0;
+}
+.login-card .btn-success {
+  background: linear-gradient(90deg, #198754 60%, #0d6efd 100%);
+  border: none;
+  transition: background 0.3s;
+}
+.login-card .btn-success:hover {
+  background: linear-gradient(90deg, #0d6efd 60%, #198754 100%);
+}
+</style>

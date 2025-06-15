@@ -1,0 +1,152 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <div class="card shadow-sm border-0 rounded-4 p-4">
+    <!-- Mensaje de empresa seleccionada -->
+    <div class="mb-5">
+      @if (empresaSeleccionada) {
+        <span class="fs-4">
+          Tiene seleccionada la empresa <strong>{{ empresaSeleccionada.nombre }}</strong>.
+        </span>
+      } @else {
+        <span class="fs-4">
+          Seleccione una empresa para trabajar con ella.
+        </span>
+      }
+    </div>
+
+    <h4 class="mb-4 text-primary-emphasis fw-bold">Empresas disponibles</h4>
+
+    <div class="table-responsive">
+      <table
+        class="table table-hover align-middle rounded-3 overflow-hidden shadow-sm"
+      >
+        <thead class="table-primary text-white">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">RFC</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (lista_empresas.length > 0) { @for (empresa of lista_empresas;
+          track empresa._id) {
+          <tr class="hover-card">
+            <td>{{ empresa.nombre }}</td>
+            <td>{{ empresa.rfc }}</td>
+            <td>
+              <button
+                class="btn btn-primary btn-sm loaded-btn"
+                (click)="seleccionarEmpresa(empresa)"
+              >
+                Seleccionar
+              </button>
+            </td>
+          </tr>
+          } } @else {
+          <tr>
+            <td colspan="3" class="text-center text-muted py-3">
+              No hay empresas disponibles.
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+@if (succesEmpresaModal) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.4)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-0 bg-gradient text-white rounded-top-4">
+        <h5 class="modal-title">Éxito</h5>
+      </div>
+      <div class="modal-body">
+        <p>
+          Has seleccionado la empresa
+          <strong>{{empresaSeleccionada?.nombre}}</strong> para realizar
+          operaciones.
+        </p>
+      </div>
+      <div class="modal-footer border-0">
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="succesEmpresaModal = false"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<style>
+  .hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .hover-card:hover {
+    background-color: rgba(0, 120, 255, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  .loaded-btn {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    font-weight: 600;
+  }
+
+  .loaded-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+    z-index: 1;
+  }
+
+  .loaded-btn:hover::before {
+    animation-duration: 1s;
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -150%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  .modal-content {
+    border-radius: 1rem;
+    background: white;
+  }
+
+  .bg-gradient {
+    background: linear-gradient(135deg, #007bff, #004a99);
+  }
+
+  .text-primary-emphasis {
+    color: #004085;
+  }
+</style>
